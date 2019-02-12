@@ -1,54 +1,58 @@
 Building configuration...
 
-Current configuration : 3487 bytes
+  
+Current configuration : 3536 bytes
 !
-! Last configuration change at 16:48:10 UTC Mon Feb 11 2019
+! Last configuration change at 22:44:26 UTC Tue Feb 12 2019 by cisco
 !
-version 15.2
+version 15.6
 service timestamps debug datetime msec
 service timestamps log datetime msec
 no service password-encryption
-service compress-config
 !
-hostname SW2
+hostname R3
 !
 boot-start-marker
 boot-end-marker
 !
 !
-vrf definition Mgmt-intf
- !
- address-family ipv4
- exit-address-family
- !
- address-family ipv6
- exit-address-family
+enable secret 5 $1$iI2V$X9v9sDFCtKoE1vWybwW9Z/
 !
-enable password cisco
-!
-username cisco privilege 15 secret 5 $1$BnWs$TuKuKL4GBdoGYG3t6oJ0Y1
 no aaa new-model
 !
 !
 !
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
 !
 !
-vtp domain virl.lab
-vtp mode transparent
 !
 !
 !
-no ip domain-lookup
-ip domain-name virl.lab
+!
+!
+!
+ip vrf Mgmt-intf
+!
+!
+!
+!
+no ip domain lookup
+ip domain name virl.info
 ip cef
 no ipv6 cef
 !
+multilink bundle-name authenticated
 !
 !
-spanning-tree mode pvst
-spanning-tree extend system-id
 !
-vlan internal allocation policy ascending
+!
+username cisco privilege 15 secret 5 $1$KHyR$yEcg/M25pl5grgfa1ODBE.
+!
+redundancy
+!
 !
 ! 
 !
@@ -62,47 +66,44 @@ vlan internal allocation policy ascending
 !
 !
 !
+interface Loopback0
+ ip address 10.1.1.5 255.255.255.255
 !
 interface GigabitEthernet0/0
- description OOB management
- no switchport
- vrf forwarding Mgmt-intf
- ip address 172.16.1.14 255.255.255.0
- negotiation auto
- no cdp enable
+ ip vrf forwarding Mgmt-intf
+ ip address 172.16.1.15 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
 !
 interface GigabitEthernet0/1
+ description R1 Transit
+ ip address 10.10.12.38 255.255.255.252
+ no ip redirects
+ no ip proxy-arp
+ duplex auto
+ speed auto
  media-type rj45
- negotiation auto
 !
 interface GigabitEthernet0/2
+ description R2 Transit
+ ip address 10.10.12.42 255.255.255.252
+ no ip redirects
+ no ip proxy-arp
+ duplex auto
+ speed auto
  media-type rj45
- negotiation auto
-!
-interface GigabitEthernet0/3
- media-type rj45
- negotiation auto
-!
-interface GigabitEthernet1/0
- media-type rj45
- negotiation auto
-!
-interface GigabitEthernet1/1
- media-type rj45
- negotiation auto
-!
-interface GigabitEthernet1/2
- media-type rj45
- negotiation auto
 !
 ip forward-protocol nd
 !
+!
 no ip http server
 no ip http secure-server
-!
 ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 172.16.1.1
+ip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
 !
-!
+ipv6 ioam timestamp
 !
 !
 !
@@ -137,7 +138,6 @@ banner login ^C
 **************************************************************************^C
 !
 line con 0
- password cisco
  logging synchronous
 line aux 0
 line vty 0 4
@@ -147,5 +147,6 @@ line vty 0 4
  login local
  transport input telnet ssh
 !
+no scheduler allocate
 !
 end

@@ -1,22 +1,30 @@
 Building configuration...
 
   
-Current configuration : 3302 bytes
+Current configuration : 3903 bytes
 !
-! Last configuration change at 16:49:44 UTC Mon Feb 11 2019
+! Last configuration change at 22:44:10 UTC Tue Feb 12 2019 by cisco
 !
 version 15.6
 service timestamps debug datetime msec
 service timestamps log datetime msec
 no service password-encryption
 !
-hostname R3
+hostname R2
 !
 boot-start-marker
 boot-end-marker
 !
 !
-enable secret 5 $1$iI2V$X9v9sDFCtKoE1vWybwW9Z/
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable password cisco
 !
 no aaa new-model
 !
@@ -34,22 +42,21 @@ mmi snmp-timeout 180
 !
 !
 !
-ip vrf Mgmt-intf
-!
 !
 !
 !
 no ip domain lookup
 ip domain name virl.info
 ip cef
-no ipv6 cef
+ipv6 unicast-routing
+ipv6 cef
 !
 multilink bundle-name authenticated
 !
 !
 !
 !
-username cisco privilege 15 secret 5 $1$KHyR$yEcg/M25pl5grgfa1ODBE.
+username cisco privilege 15 secret 5 $1$AJO7$0fEfoYAtdTiM5cdl4QbWH/
 !
 redundancy
 !
@@ -66,23 +73,41 @@ redundancy
 !
 !
 !
+interface Loopback0
+ ip address 10.1.1.2 255.255.255.255
+!
 interface GigabitEthernet0/0
- ip vrf forwarding Mgmt-intf
- ip address 172.16.1.15 255.255.255.0
- duplex auto
+ description OOB Management
+ vrf forwarding Mgmt-intf
+ ip address 172.16.1.12 255.255.255.0
+ duplex full
  speed auto
  media-type rj45
+ no cdp enable
 !
 interface GigabitEthernet0/1
- no ip address
- shutdown
+ description SW2 Transit
+ ip address 10.10.12.26 255.255.255.252
+ no ip redirects
+ no ip proxy-arp
  duplex auto
  speed auto
  media-type rj45
 !
 interface GigabitEthernet0/2
- no ip address
- shutdown
+ description SW1 Transit
+ ip address 10.10.12.6 255.255.255.252
+ no ip redirects
+ no ip proxy-arp
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/3
+ description R3 Transit
+ ip address 10.10.12.41 255.255.255.252
+ no ip redirects
+ no ip proxy-arp
  duplex auto
  speed auto
  media-type rj45
@@ -94,6 +119,7 @@ no ip http server
 no ip http secure-server
 ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 172.16.1.1
 ip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+ip ssh server algorithm authentication password
 ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
 !
 ipv6 ioam timestamp
@@ -131,9 +157,11 @@ banner login ^C
 **************************************************************************^C
 !
 line con 0
+ password cisco
  logging synchronous
 line aux 0
 line vty 0 4
+ exec-timeout 720 0
  password cisco
  logging synchronous
  login local

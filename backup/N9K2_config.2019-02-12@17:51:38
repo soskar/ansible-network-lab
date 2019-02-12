@@ -1,5 +1,5 @@
 !Command: show running-config
-!Time: Mon Feb 11 16:59:01 2019
+!Time: Tue Feb 12 22:51:35 2019
 
 version 7.0(3)I7(1)
 vdc switch id 1
@@ -10,11 +10,10 @@ vdc switch id 1
   limit-resource u6route-mem minimum 96 maximum 96
   limit-resource m4route-mem minimum 58 maximum 58
   limit-resource m6route-mem minimum 8 maximum 8
-feature nxapi
-cfs eth distribute
+feature lacp
 
 no password strength-check
-username admin password 5 $5$D6F2N2Fg$lM7DgJYgsIjcN7d7y0L46KPuli0OUDMSX6MzgroDYz1  role network-admin
+username admin password 5 $5$6w26EvS.$WC3e1fc9Q422Nqsfv2OS33vSy49/Kj1yQnuD1pls6b9  role network-admin
 ip domain-lookup
 snmp-server user admin network-admin auth md5 0xaf2d270c15e40eb489009b01914a6c85 priv 0xaf2d270c15e40eb489009b01914a6c85 localizedkey
 rmon event 1 description FATAL(1) owner PMON@FATAL
@@ -23,28 +22,74 @@ rmon event 3 description ERROR(3) owner PMON@ERROR
 rmon event 4 description WARNING(4) owner PMON@WARNING
 rmon event 5 description INFORMATION(5) owner PMON@INFO
 
-vlan 1
+vlan 1,10,20
+vlan 10
+  name Server-1_Data
+vlan 20
+  name Server-2_Data
 
 vrf context management
   ip route 0.0.0.0/0 172.16.1.1
 
+interface port-channel1
+  switchport mode trunk
+  switchport trunk allowed vlan 10,20
+  spanning-tree port type network
+
+interface port-channel2
+  description To Server-1
+  switchport access vlan 10
+  spanning-tree port type edge
+
+interface port-channel3
+  description To Server-2
+  switchport access vlan 20
+  spanning-tree port type edge
+
 interface Ethernet1/1
+  description To N9K1 Eth1/1
+  switchport mode trunk
+  switchport trunk allowed vlan 10,20
+  channel-group 1 mode active
 
 interface Ethernet1/2
+  description To N9K1 Eth1/2
+  switchport mode trunk
+  switchport trunk allowed vlan 10,20
+  channel-group 1 mode active
 
 interface Ethernet1/3
+  description N9K2-SW1 Transit
+  no switchport
+  no ip redirects
+  ip address 10.10.12.18/30
+  no shutdown
 
 interface Ethernet1/4
+  description N9K2-SW2 Transit
+  no switchport
+  no ip redirects
+  ip address 10.10.12.34/30
+  no shutdown
 
 interface Ethernet1/5
+  description To Server-1 Eth2
+  switchport access vlan 10
+  channel-group 2 mode active
 
 interface Ethernet1/6
+  description To Server-2 Eth2
+  switchport access vlan 20
+  channel-group 3 mode active
 
 interface Ethernet1/7
+  shutdown
 
 interface Ethernet1/8
+  shutdown
 
 interface Ethernet1/9
+  shutdown
 
 interface Ethernet1/10
 
@@ -159,5 +204,8 @@ interface Ethernet1/64
 interface mgmt0
   vrf member management
   ip address 172.16.1.17/24
+
+interface loopback0
+  ip address 10.1.1.7/32
 line console
 line vty

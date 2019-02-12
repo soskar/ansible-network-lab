@@ -1,16 +1,16 @@
 Building configuration...
 
-  
-Current configuration : 3605 bytes
+Current configuration : 5171 bytes
 !
-! Last configuration change at 16:48:10 UTC Mon Feb 11 2019
+! Last configuration change at 22:39:18 UTC Tue Feb 12 2019 by cisco
 !
-version 15.6
+version 15.2
 service timestamps debug datetime msec
 service timestamps log datetime msec
 no service password-encryption
+service compress-config
 !
-hostname R2
+hostname SW1
 !
 boot-start-marker
 boot-end-marker
@@ -26,40 +26,44 @@ vrf definition Mgmt-intf
 !
 enable password cisco
 !
+username cisco privilege 15 secret 5 $1$Xg3Q$n5wzxsE6pt1ltqXR0jKfc0
 no aaa new-model
 !
 !
 !
-mmi polling-interval 60
-no mmi auto-configure
-no mmi pvc
-mmi snmp-timeout 180
+!
+!
+vtp domain virl.lab
+vtp mode transparent
 !
 !
 !
-!
-!
-!
-!
-!
-!
-!
-!
-no ip domain lookup
-ip domain name virl.info
+no ip domain-lookup
+ip domain-name virl.info
 ip cef
-ipv6 unicast-routing
-ipv6 cef
-!
-multilink bundle-name authenticated
+no ipv6 cef
 !
 !
 !
+spanning-tree mode pvst
+spanning-tree extend system-id
 !
-username cisco privilege 15 secret 5 $1$AJO7$0fEfoYAtdTiM5cdl4QbWH/
+vlan internal allocation policy ascending
 !
-redundancy
+vlan 101
+ name R1_Transit
 !
+vlan 102
+ name R2_Transit
+!
+vlan 103
+ name SW1-SW2_Transit
+!
+vlan 104
+ name SW1-N9K1_Transit
+!
+vlan 105
+ name SW1-N9K2_Transit
 !
 ! 
 !
@@ -73,46 +77,111 @@ redundancy
 !
 !
 !
+!
+interface Loopback0
+ ip address 10.1.1.3 255.255.255.255
+!
+interface Port-channel1
+ switchport trunk allowed vlan 103
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
 interface GigabitEthernet0/0
- description OOB Management
+ description OOB management
+ no switchport
  vrf forwarding Mgmt-intf
- ip address 172.16.1.12 255.255.255.0
- duplex full
- speed auto
- media-type rj45
+ ip address 172.16.1.13 255.255.255.0
+ negotiation auto
  no cdp enable
 !
 interface GigabitEthernet0/1
- no ip address
- duplex auto
- speed auto
+ description To R2 Gi0/2
+ switchport access vlan 102
+ switchport mode access
  media-type rj45
+ negotiation auto
+ spanning-tree portfast edge
 !
 interface GigabitEthernet0/2
- no ip address
- shutdown
- duplex auto
- speed auto
+ description To R1 Gi0/1
+ switchport access vlan 101
+ switchport mode access
  media-type rj45
+ negotiation auto
+ spanning-tree portfast edge
 !
 interface GigabitEthernet0/3
- no ip address
- shutdown
- duplex auto
- speed auto
+ description To SW2 Gi0/3
+ switchport trunk allowed vlan 103
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
  media-type rj45
+ negotiation auto
+ channel-group 1 mode active
+!
+interface GigabitEthernet1/0
+ description To SW2 Gi1/0
+ switchport trunk allowed vlan 103
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ media-type rj45
+ negotiation auto
+ channel-group 1 mode active
+!
+interface GigabitEthernet1/1
+ description To N9K1 Eth1/3
+ switchport access vlan 104
+ switchport mode access
+ media-type rj45
+ negotiation auto
+ spanning-tree portfast edge
+!
+interface GigabitEthernet1/2
+ description To N9K1 Eth1/3
+ switchport access vlan 105
+ switchport mode access
+ media-type rj45
+ negotiation auto
+ spanning-tree portfast edge
+!
+interface Vlan101
+ description R1 Transit
+ ip address 10.10.12.1 255.255.255.252
+ no ip redirects
+ no ip proxy-arp
+!
+interface Vlan102
+ description R2 Transit
+ ip address 10.10.12.5 255.255.255.252
+ no ip redirects
+ no ip proxy-arp
+!
+interface Vlan103
+ description SW1-SW2 Transit
+ ip address 10.10.12.9 255.255.255.252
+ no ip redirects
+ no ip proxy-arp
+!
+interface Vlan104
+ description SW1-N9K1 Transit
+ ip address 10.10.12.13 255.255.255.252
+ no ip redirects
+ no ip proxy-arp
+!
+interface Vlan105
+ description SW1-N9K2 Transit
+ ip address 10.10.12.17 255.255.255.252
+ no ip redirects
+ no ip proxy-arp
 !
 ip forward-protocol nd
 !
-!
 no ip http server
 no ip http secure-server
-ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 172.16.1.1
-ip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr
-ip ssh server algorithm authentication password
-ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
 !
-ipv6 ioam timestamp
+ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 172.16.1.1
+!
+!
 !
 !
 !
@@ -157,6 +226,5 @@ line vty 0 4
  login local
  transport input telnet ssh
 !
-no scheduler allocate
 !
 end
