@@ -1,0 +1,39 @@
+---
+- connection: network_cli
+  gather_facts: False
+  hosts: nodes
+  vars_files:
+  - group_vars/ios.yml
+
+  tasks:
+
+  - name: Configure layer 3 interfaces (ios)
+    ios_config:
+      lines:
+        - description {{ item.description }}
+        - ip address {{ item.address }} {{ item.mask }}
+        - no ip redirects
+        - no ip proxy-arp
+        - no shutdown
+      parents: interface {{ item.interface }}
+    with_items: "{{ l3_interfaces }}"
+
+- connection: network_cli
+  gather_facts: False
+  hosts: 9ks
+  vars_files:
+  - group_vars/nxos.yml
+
+  tasks:
+
+  - name: Configure layer 3 interfaces (nxos)
+    nxos_config:
+      lines:
+        - description {{ item.description }}
+        - no switchport
+        - ip address {{ item.address }} {{ item.mask }}
+        - no ip redirects
+        - no ip proxy-arp
+        - no shutdown
+      parents: interface {{ item.interface }}
+    with_items: "{{ l3_interfaces }}"

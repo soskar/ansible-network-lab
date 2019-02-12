@@ -1,0 +1,26 @@
+---
+- connection: network_cli
+  gather_facts: False
+  hosts: nodes
+  vars_files:
+  - group_vars/ios.yml
+
+  tasks:
+  
+  - name: Configure login banner
+    ios_banner:
+      banner: login
+      text: "{{ lookup('file', './config_partial/raw_banner.cfg') }}"
+      state: present
+      
+  - name: Configure the exec banner
+    ios_banner:
+      banner: exec
+      text: "{{ lookup('file', './config_partial/raw_banner.cfg') }}"
+      state: present
+      
+  - name: Configure the incoming banner
+    ios_banner:
+      banner: incoming
+      text: "{{ lookup('file', './config_partial/raw_banner.cfg') }}"
+      state: present

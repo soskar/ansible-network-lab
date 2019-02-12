@@ -1,0 +1,40 @@
+---
+- connection: network_cli
+  gather_facts: False
+  hosts: switches
+  vars_files:
+  - group_vars/ios.yml
+
+  tasks:
+
+  - name: Configure access ports (ios)
+    ios_config:
+      lines:
+        - description {{ item.description }}
+        - switchport
+        - switchport mode access
+        - switchport access vlan {{ item.vlan }}
+        - spanning-tree portfast
+        - no shutdown
+      parents: interface {{ item.access_port }}
+    with_items: "{{ access_ports }}"
+
+- connection: network_cli
+  gather_facts: False
+  hosts: 9ks
+  vars_files:
+  - group_vars/nxos.yml
+
+  tasks:
+
+  - name: Configure access ports (nxos)
+    nxos_config:
+      lines:
+        - description {{ item.description }}
+        - switchport
+        - switchport mode access
+        - switchport access vlan {{ item.vlan }}
+        - spanning-tree port type edge
+        - no shutdown
+      parents: interface {{ item.access_port }}
+    with_items: "{{ access_ports }}"

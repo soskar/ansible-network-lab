@@ -1,0 +1,5 @@
+---
+lo_interfaces:
+  - interface: lo0
+    address: 10.1.1.3
+    mask: 255.255.255.255

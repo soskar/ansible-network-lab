@@ -1,0 +1,30 @@
+---
+- connection: network_cli
+  gather_facts: False
+  hosts: nodes
+  vars_files:
+  - group_vars/ios.yml
+
+  tasks:
+
+  - name: Configure loopback interfaces
+    ios_config:
+      lines:
+        - ip address {{ item.address }} {{ item.mask }}
+      parents: interface {{ item.interface }}
+    with_items: "{{ lo_interfaces }}"
+
+- connection: network_cli
+  gather_facts: False
+  hosts: 9ks
+  vars_files:
+  - group_vars/nxos.yml
+
+  tasks:
+
+  - name: Configure loopback interfaces (nxos)
+    nxos_config:
+      lines:
+        - ip address {{ item.address }} {{ item.mask }}
+      parents: interface {{ item.interface }}
+    with_items: "{{ lo_interfaces }}"

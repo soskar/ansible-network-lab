@@ -1,0 +1,13 @@
+---
+- connection: network_cli
+  gather_facts: False
+  hosts: 9ks
+  vars_files:
+  - group_vars/nxos.yml
+
+  tasks:
+
+  - name: Configure N9K hostnames
+    nxos_config:
+      lines:
+      - hostname {{ hostname }}

@@ -1,0 +1,21 @@
+---
+- connection: network_cli
+  gather_facts: False
+  hosts: nodes
+  vars_files:
+  - group_vars/ios.yml
+
+  tasks:
+  - name: Configure OSPF router IDs
+    ios_config:
+      lines:
+        - router-id {{ item.address }}
+      parents: router ospf 100
+    with_items: "{{ lo_interfaces }}"
+    
+  - name: Configure OSPF networks
+    ios_config:
+      lines:
+        - network {{ item.network }} {{ item.wildcard }} area {{ item.area }}
+      parents: router ospf 100
+    with_items: "{{ ospf }}"

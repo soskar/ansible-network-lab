@@ -1,0 +1,12 @@
+---
+vlans:
+  - vlan: 101
+    name: R1_Transit
+  - vlan: 102
+    name: R2_Transit
+  - vlan: 103
+    name: SW1-SW2_Transit
+  - vlan: 104
+    name: SW2-N9K1_Transit
+  - vlan: 105
+    name: SW2-N9K2_Transit

@@ -1,0 +1,22 @@
+---
+l3_interfaces:
+  - interface: Vlan101
+    description: R1 Transit
+    address: 10.10.12.21
+    mask: 255.255.255.252
+  - interface: Vlan102
+    description: R2 Transit
+    address: 10.10.12.25
+    mask: 255.255.255.252
+  - interface: Vlan103
+    description: SW1-SW2 Transit
+    address: 10.10.12.10
+    mask: 255.255.255.252
+  - interface: Vlan104
+    description: SW2-N9K1 Transit
+    address: 10.10.12.29
+    mask: 255.255.255.252
+  - interface: Vlan105
+    description: SW2-N9K2 Transit
+    address: 10.10.12.33
+    mask: 255.255.255.252

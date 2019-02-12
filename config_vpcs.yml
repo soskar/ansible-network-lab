@@ -1,0 +1,14 @@
+- connection: network_cli
+  gather_facts: False
+  hosts: 9ks
+  vars_files:
+  - group_vars/nxos.yml
+
+  tasks:
+
+  - name: Configure vPCs
+    nxos_config:
+      lines:
+        - vpc {{ item.vpc }}
+      parents: interface {{ item.interface }}
+    with_items: "{{ vpcs }}"

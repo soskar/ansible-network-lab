@@ -1,0 +1,26 @@
+---
+- connection: network_cli
+  gather_facts: False
+  hosts: nodes
+  vars_files:
+  - group_vars/ios.yml
+
+  tasks:
+
+  - name: Backup (ios)
+    ios_config:
+      backup: yes
+    register: backup_ios_location
+
+- connection: network_cli
+  gather_facts: False
+  hosts: 9ks
+  vars_files:
+  - group_vars/nxos.yml
+
+  tasks:
+
+  - name: Backup (nxos)
+    nxos_config:
+      backup: yes
+    register: backup_nxos_location

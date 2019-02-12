@@ -1,0 +1,16 @@
+[routers]
+R1 ansible_ssh_host=172.16.1.11
+R2 ansible_ssh_host=172.16.1.12
+R3 ansible_ssh_host=172.16.1.15
+
+[switches]
+SW1 ansible_ssh_host=172.16.1.13
+SW2 ansible_ssh_host=172.16.1.14
+
+[9ks]
+N9K1 ansible_ssh_host=172.16.1.16
+N9K2 ansible_ssh_host=172.16.1.17
+
+[nodes:children]
+routers
+switches

@@ -1,0 +1,31 @@
+---
+- connection: network_cli
+  gather_facts: False
+  hosts: 9ks
+  vars_files:
+  - group_vars/nxos.yml
+
+  tasks:
+
+  - name: Check vPC features
+    nxos_config:
+      lines:
+        - feature vpc
+
+  - name: Configure vPC domain
+    nxos_config:
+      lines:
+        - role priority {{ item.role_priority }}
+        - peer-keepalive destination {{ item.keepalive_dst }} source {{ item.keepalive_src }}
+      parents: vpc domain {{ item.domain }}
+    with_items: "{{ vpc_domain }}"
+
+  - name: Configure vPC peer link
+    nxos_config:
+      lines:
+        - description vPC Peer Link
+        - spanning-tree port type network
+        - vpc peer-link
+        - no shutdown
+      parents: interface {{ item.interface }}
+    with_items: "{{ vpc_peer_link }}"

@@ -1,0 +1,14 @@
+---
+access_ports:
+  - access_port: GigabitEthernet0/1
+    description: To R2 Gi0/2
+    vlan: 102
+  - access_port: GigabitEthernet0/2
+    description: To R1 Gi0/1
+    vlan: 101
+  - access_port: GigabitEthernet1/1
+    description: To N9K1 Eth1/3
+    vlan: 104
+  - access_port: GigabitEthernet1/2
+    description: To N9K1 Eth1/3
+    vlan: 105

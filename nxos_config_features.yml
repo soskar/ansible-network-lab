@@ -1,0 +1,14 @@
+---
+- connection: network_cli
+  gather_facts: False
+  hosts: 9ks
+  vars_files:
+  - group_vars/nxos.yml
+
+  tasks:
+
+  - name: Configure features
+    nxos_config:
+      lines:
+      - feature {{ item.feature }}
+    with_items: "{{ features }}"

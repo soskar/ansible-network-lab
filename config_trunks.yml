@@ -1,0 +1,38 @@
+---
+- connection: network_cli
+  gather_facts: False
+  hosts: switches
+  vars_files:
+  - group_vars/ios.yml
+
+  tasks:
+
+  - name: Configure trunks
+    ios_config:
+      lines:
+        - switchport
+        - switchport trunk encapsulation dot1q
+        - switchport mode trunk
+        - switchport trunk allowed vlan {{ item.allowed_vlans }}
+        - no shutdown
+      parents: interface {{ item.trunk }}
+    with_items: "{{ trunks }}"
+
+- connection: network_cli
+  gather_facts: False
+  hosts: 9ks
+  vars_files:
+  - group_vars/nxos.yml
+
+  tasks:
+  
+  - name: Configure trunks (nxos)
+    nxos_config:
+      lines:
+        - switchport
+        - switchport mode trunk
+        - spanning-tree port type network
+        - switchport trunk allowed vlan {{ item.allowed_vlans }}
+        - no shutdown
+      parents: interface {{ item.trunk }}
+    with_items: "{{ trunks }}"
