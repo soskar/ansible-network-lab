@@ -1,9 +1,9 @@
 Building configuration...
 
   
-Current configuration : 3536 bytes
+Current configuration : 2414 bytes
 !
-! Last configuration change at 22:44:26 UTC Tue Feb 12 2019 by cisco
+! Last configuration change at 22:48:01 UTC Tue Feb 12 2019 by cisco
 !
 version 15.6
 service timestamps debug datetime msec
@@ -110,32 +110,20 @@ ipv6 ioam timestamp
 control-plane
 !
 banner exec ^C
+*********************************WARNING**********************************
+*                            THIS IS A BANNER                            *
 **************************************************************************
-* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
-* education. IOSv is provided as-is and is not supported by Cisco's      *
-* Technical Advisory Center. Any use or disclosure, in whole or in part, *
-* of the IOSv Software or Documentation to any third party for any       *
-* purposes is expressly prohibited except as otherwise authorized by     *
-* Cisco in writing.                                                      *
-**************************************************************************^C
+^C
 banner incoming ^C
+*********************************WARNING**********************************
+*                            THIS IS A BANNER                            *
 **************************************************************************
-* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
-* education. IOSv is provided as-is and is not supported by Cisco's      *
-* Technical Advisory Center. Any use or disclosure, in whole or in part, *
-* of the IOSv Software or Documentation to any third party for any       *
-* purposes is expressly prohibited except as otherwise authorized by     *
-* Cisco in writing.                                                      *
-**************************************************************************^C
+^C
 banner login ^C
+*********************************WARNING**********************************
+*                            THIS IS A BANNER                            *
 **************************************************************************
-* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
-* education. IOSv is provided as-is and is not supported by Cisco's      *
-* Technical Advisory Center. Any use or disclosure, in whole or in part, *
-* of the IOSv Software or Documentation to any third party for any       *
-* purposes is expressly prohibited except as otherwise authorized by     *
-* Cisco in writing.                                                      *
-**************************************************************************^C
+^C
 !
 line con 0
  logging synchronous
