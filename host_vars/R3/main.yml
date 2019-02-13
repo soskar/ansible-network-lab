@@ -1,4 +1,9 @@
 ---
+lo_interfaces:
+  - interface: lo0
+    address: 10.1.1.5
+    mask: 255.255.255.255
+
 l3_interfaces:
   - interface: Gi0/1
     description: R1 Transit

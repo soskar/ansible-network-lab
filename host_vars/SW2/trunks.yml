@@ -1,4 +1,0 @@
----
-trunks:
-  - trunk: Port-channel1
-    allowed_vlans: 103
