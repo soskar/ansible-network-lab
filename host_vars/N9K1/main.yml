@@ -74,3 +74,15 @@ l3_interfaces:
     description: N9K1-SW2 Transit
     address: 10.10.12.30
     mask: 255.255.255.252
+
+ospf:
+  - interface: Loopback0
+    area: 0
+  - interface: Ethernet1/3
+    area: 0
+  - interface: Ethernet1/4
+    area: 0
+
+ospf_interfaces:
+  - interface: Ethernet1/3
+  - interface: Ethernet1/4

@@ -8,9 +8,9 @@
   tasks:
 
   - name: Check vPC features
-    nxos_config:
-      lines:
-        - feature vpc
+    nxos_feature:
+      feature: vpc
+      state: enabled
 
   - name: Configure vPC domain
     nxos_config:

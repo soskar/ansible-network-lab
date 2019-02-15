@@ -6,6 +6,11 @@
 
   tasks:
 
+  - name: Check NXOS vPC feature
+    nxos_feature:
+      feature: vpc
+      state: enabled
+
   - name: Configure vPCs
     nxos_config:
       lines:

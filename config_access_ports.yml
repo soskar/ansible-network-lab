@@ -15,7 +15,6 @@
         - switchport mode access
         - switchport access vlan {{ item.vlan }}
         - spanning-tree portfast
-        - no shutdown
       parents: interface {{ item.access_port }}
     with_items: "{{ access_ports }}"
 
@@ -35,6 +34,5 @@
         - switchport mode access
         - switchport access vlan {{ item.vlan }}
         - spanning-tree port type edge
-        - no shutdown
       parents: interface {{ item.access_port }}
     with_items: "{{ access_ports }}"

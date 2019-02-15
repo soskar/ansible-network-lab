@@ -1,21 +1,58 @@
 ---
 - connection: network_cli
   gather_facts: False
-  hosts: nodes
+  hosts: ospf_ios
   vars_files:
   - group_vars/ios.yml
 
   tasks:
-  - name: Configure OSPF router IDs
+    
+  - name: Configure OSPF (ios)
     ios_config:
+      lines:
+        - router-id {{ item[0].address }}
+        - passive-interface default
+        - network {{ item[1].network }} {{ item[1].wildcard }} area {{ item[1].area }}
+        - no passive-interface {{ item[2].interface }}
+      parents: router ospf 100
+    with_nested:
+      - "{{ lo_interfaces }}"
+      - "{{ ospf }}"
+      - "{{ ospf_interfaces }}"
+  - debug:
+      msg: "Test"
+
+- connection: network_cli
+  gather_facts: False
+  hosts: 9ks
+  vars_files:
+  - group_vars/nxos.yml
+
+  tasks:
+  
+  - name: Check NXOS OSPF feature
+    nxos_feature:
+      feature: ospf
+      state: enabled
+
+  - name: Configure OSPF global settings (nxos)
+    nxos_config:
       lines:
         - router-id {{ item.address }}
+        - passive-interface default
       parents: router ospf 100
     with_items: "{{ lo_interfaces }}"
-    
+
   - name: Configure OSPF networks
-    ios_config:
+    nxos_config:
       lines:
-        - network {{ item.network }} {{ item.wildcard }} area {{ item.area }}
-      parents: router ospf 100
+        - ip router ospf 100 area {{ item.area }}
+      parents: interface {{ item.interface }}
     with_items: "{{ ospf }}"
+
+  - name: Configure OSPF interfaces
+    nxos_config:
+      lines:
+        - no ip ospf passive-interface
+      parents: interface {{ item.interface }}
+    with_items: "{{ ospf_interfaces }}"

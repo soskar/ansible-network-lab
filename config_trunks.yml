@@ -14,7 +14,6 @@
         - switchport trunk encapsulation dot1q
         - switchport mode trunk
         - switchport trunk allowed vlan {{ item.allowed_vlans }}
-        - no shutdown
       parents: interface {{ item.trunk }}
     with_items: "{{ trunks }}"
 
@@ -33,6 +32,5 @@
         - switchport mode trunk
         - spanning-tree port type network
         - switchport trunk allowed vlan {{ item.allowed_vlans }}
-        - no shutdown
       parents: interface {{ item.trunk }}
     with_items: "{{ trunks }}"

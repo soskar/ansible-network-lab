@@ -1,4 +1,6 @@
 ---
+hostname: R3
+
 lo_interfaces:
   - interface: lo0
     address: 10.1.1.5

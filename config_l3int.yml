@@ -14,7 +14,6 @@
         - ip address {{ item.address }} {{ item.mask }}
         - no ip redirects
         - no ip proxy-arp
-        - no shutdown
       parents: interface {{ item.interface }}
     with_items: "{{ l3_interfaces }}"
 
@@ -34,6 +33,5 @@
         - ip address {{ item.address }} {{ item.mask }}
         - no ip redirects
         - no ip proxy-arp
-        - no shutdown
       parents: interface {{ item.interface }}
     with_items: "{{ l3_interfaces }}"

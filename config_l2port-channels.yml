@@ -12,17 +12,9 @@
       lines:
         - switchport
         - description {{ item.description }}
-        - no shutdown
         - channel-group {{ item.group }} mode active
       parents: interface {{ item.interface }}
     with_items: "{{ l2_pc_members }}"
-
-#  - name: Configure layer 2 port-channel interfaces
-#    ios_config:
-#      lines:
-#        - switchport
-#      parents: interface {{ item.interface }}
-#    with_items: "{{ l2_pc_interfaces }}"
 
 - connection: network_cli
   gather_facts: False
@@ -33,9 +25,9 @@
   tasks:
   
   - name: Check NXOS LACP feature
-    nxos_config:
-      lines:
-      - feature lacp
+    nxos_feature:
+      feature: lacp
+      state: enabled
 
   - name: Configure NXOS layer 2 port-channel members
     nxos_config:
@@ -43,14 +35,5 @@
         - switchport
         - description {{ item.description }}
         - channel-group {{ item.group }} mode active
-        - no shutdown
       parents: interface {{ item.interface }}
     with_items: "{{ l2_pc_members }}"
-
-#  - name: Configure NXOS layer 2 port-channel interfaces
-#    nxos_config:
-#      lines:
-#        - switchport
-#        - no shutdown
-#      parents: interface {{ item.interface }}
-#    with_items: "{{ l2_pc_interfaces }}"
