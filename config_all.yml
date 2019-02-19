@@ -11,3 +11,4 @@
 - import_playbook: config_l3int.yml
 - import_playbook: enable_interfaces.yml
 - import_playbook: config_ospf.yml
+- import_playbook: config_bgp.yml

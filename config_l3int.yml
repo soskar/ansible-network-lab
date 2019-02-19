@@ -1,5 +1,6 @@
 ---
-- connection: network_cli
+- name: Configure layer 3 interfaces
+  connection: network_cli
   gather_facts: False
   hosts: nodes
   vars_files:
@@ -7,7 +8,7 @@
 
   tasks:
 
-  - name: Configure layer 3 interfaces (ios)
+  - name: L3 interfaces (ios)
     ios_config:
       lines:
         - description {{ item.description }}
@@ -25,7 +26,7 @@
 
   tasks:
 
-  - name: Configure layer 3 interfaces (nxos)
+  - name: L3 interfaces (nxos)
     nxos_config:
       lines:
         - description {{ item.description }}
@@ -35,3 +36,33 @@
         - no ip proxy-arp
       parents: interface {{ item.interface }}
     with_items: "{{ l3_interfaces }}"
+
+  - name: Check NXOS interface-vlan feature
+    nxos_feature:
+      feature: interface-vlan
+      state: enabled
+
+  - name: Check NXOS hsrp feature
+    nxos_feature:
+      feature: hsrp
+      state: enabled
+
+  - name: SVIs (nxos)
+    nxos_config:
+      lines:
+        - description {{ item.description }}
+        - ip address {{ item.address }} {{ item.mask }}
+        - no ip redirects
+        - no ip proxy-arp
+      parents: interface {{ item.interface }}
+    with_items: "{{ svis }}"
+
+  - name: HSRP (nxos)
+    nxos_config:
+      lines:
+        - priority {{ item.hsrp_priority }}
+        - ip {{ item.hsrp_ip }}
+      parents:
+        - interface {{ item.interface }}
+        - hsrp {{ item.hsrp_group }}
+    with_items: "{{ svis }}"

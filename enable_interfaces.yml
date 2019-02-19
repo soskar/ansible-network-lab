@@ -91,4 +91,6 @@
       lines:
         - no shutdown
       parents: interface {{ item.interface }}
-    with_items: "{{ l3_interfaces }}"
+    with_items:
+      - "{{ l3_interfaces }}"
+      - "{{ svis }}"

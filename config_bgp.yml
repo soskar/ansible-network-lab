@@ -1,5 +1,6 @@
 ---
-- connection: network_cli
+- name: Configure BGP
+  connection: network_cli
   gather_facts: False
   hosts: bgp_ios
   vars_files:
@@ -7,7 +8,7 @@
 
   tasks:
     
-  - name: Configure BGP
+  - name: BGP (global)
     ios_config:
       lines:
         - bgp router-id {{ item.rid }}
@@ -15,15 +16,30 @@
       parents: router bgp {{ item.as }}
     with_items: "{{ bgp_global }}"
 
-  - name: Configure iBGP neighbors (global)
+  - name: Redistribute OSPF to BGP (global)
+    ios_config:
+      lines:
+        - redistribute ospf 100 route-map OSPF_BGP
+      parents: router bgp {{ item.as }}
+    with_items: "{{ bgp_global }}"
+    when: ospf_bgp is defined
+
+  - name: OSPF to BGP route-map
+    ios_config:
+      lines:
+        - route-map OSPF_BGP permit 10
+    when: ospf_bgp is defined
+
+  - name: iBGP neighbors (global)
     ios_config:
       lines:
         - neighbor {{ item.neighbor }} remote-as {{ item.remote_as }}
         - neighbor {{ item.neighbor }} update-source {{ item.update_source }}
       parents: router bgp {{ bgp_global[0].as }}
     with_items: "{{ ibgp_neighbors }}"
+    when: ibgp_neighbors is defined
     
-  - name: Configure iBGP neighbors (AF)
+  - name: iBGP neighbors (AF)
     ios_config:
       lines:
         - neighbor {{ item.neighbor }} activate
@@ -33,8 +49,9 @@
         - router bgp {{ bgp_global[0].as }}
         - address-family ipv4 unicast
     with_items: "{{ ibgp_neighbors }}"
+    when: ibgp_neighbors is defined
 
-  - name: Configure eBGP neighbors (global)
+  - name: eBGP neighbors (global)
     ios_config:
       lines:
         - neighbor {{ item.neighbor }} remote-as {{ item.remote_as }}
@@ -42,7 +59,7 @@
       parents: router bgp {{ bgp_global[0].as }}
     with_items: "{{ ebgp_neighbors }}"
     
-  - name: Configure eBGP neighbors (AF)
+  - name: eBGP neighbors (AF)
     ios_config:
       lines:
         - neighbor {{ item.neighbor }} activate
@@ -51,3 +68,30 @@
         - router bgp {{ bgp_global[0].as }}
         - address-family ipv4 unicast
     with_items: "{{ ebgp_neighbors }}"
+
+  - name: eBGP originate default (AF)
+    ios_config:
+      lines:
+        - neighbor {{ item.neighbor }} default-originate
+      parents:
+        - router bgp {{ bgp_global[0].as }}
+        - address-family ipv4 unicast
+    when: item.originate_default is defined
+    with_items: "{{ ebgp_neighbors }}"
+
+  - name: eBGP maximum paths (AF)
+    ios_config:
+      lines:
+        - maximum-paths {{ ebgp_max_paths }}
+      parents:
+        - router bgp {{ bgp_global[0].as }}
+        - address-family ipv4 unicast
+    when: ebgp_max_paths is defined
+
+  - name: Advertise networks
+    ios_config:
+      lines:
+        - network {{ item.network }} mask {{ item.mask }}
+      parents: router bgp {{ bgp_global[0].as }}
+    with_items: "{{ bgp_networks }}"
+    when: bgp_networks is defined

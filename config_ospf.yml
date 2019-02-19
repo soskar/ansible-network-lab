@@ -1,5 +1,6 @@
 ---
-- connection: network_cli
+- name: Configure OSPF
+  connection: network_cli
   gather_facts: False
   hosts: ospf_ios
   vars_files:
@@ -19,6 +20,13 @@
       - "{{ lo_interfaces }}"
       - "{{ ospf }}"
       - "{{ ospf_interfaces }}"
+
+  - name: Originate default (ios)
+    ios_config:
+      lines:
+        - default-information originate
+      parents: router ospf 100
+    when: ospf_oirigate_default is defined
 
 - connection: network_cli
   gather_facts: False

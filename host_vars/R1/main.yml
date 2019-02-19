@@ -35,6 +35,8 @@ ospf_interfaces:
   - interface: Gi0/1
   - interface: Gi0/2
 
+ospf_oirigate_default: True
+
 bgp_global:
   - as: 65000
     rid: "{{ lo_interfaces[0].address }}"
@@ -48,3 +50,5 @@ ebgp_neighbors:
   - neighbor: 10.10.12.38
     update_source: "{{ l3_interfaces[2].interface }}"
     remote_as: 12345
+
+ospf_bgp: True

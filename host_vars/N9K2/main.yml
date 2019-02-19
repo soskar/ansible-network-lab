@@ -75,12 +75,32 @@ l3_interfaces:
     address: 10.10.12.34
     mask: 255.255.255.252
 
+svis:
+  - interface: Vlan10
+    description: Server-1_Data
+    address: 10.10.10.3
+    mask: 255.255.255.0
+    hsrp_group: 10
+    hsrp_priority: 100
+    hsrp_ip: 10.10.10.1
+  - interface: Vlan20
+    description: Server-2_Data
+    address: 10.10.20.3
+    mask: 255.255.255.0
+    hsrp_group: 20
+    hsrp_priority: 100
+    hsrp_ip: 10.10.20.1
+
 ospf:
   - interface: Loopback0
     area: 0
   - interface: Ethernet1/3
     area: 0
   - interface: Ethernet1/4
+    area: 0
+  - interface: Vlan10
+    area: 0
+  - interface: Vlan20
     area: 0
 
 ospf_interfaces:

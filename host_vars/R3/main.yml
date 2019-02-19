@@ -20,15 +20,22 @@ bgp_global:
   - as: 12345
     rid: "{{ lo_interfaces[0].address }}"
 
-ibgp_neighbors:
-  - neighbor:
-    update_source:
-    remote_as:
+bgp_networks:
+  - network: 10.10.12.36
+    mask: 255.255.255.252
+  - network: 10.10.12.40
+    mask: 255.255.255.252
+  - network: "{{ lo_interfaces[0].address }}"
+    mask: "{{ lo_interfaces[0].mask }}"
 
 ebgp_neighbors:
   - neighbor: 10.10.12.37
     update_source: "{{ l3_interfaces[0].interface }}"
     remote_as: 65000
+    originate_default: True
   - neighbor: 10.10.12.41
     update_source: "{{ l3_interfaces[1].interface }}"
-    remote_as: 12345
+    remote_as: 65000
+    originate_default: True
+
+ebgp_max_paths: 2
