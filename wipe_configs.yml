@@ -1,0 +1,32 @@
+---
+- connection: network_cli
+  gather_facts: False
+  hosts: nodes
+  vars_files:
+  - group_vars/ios.yml
+
+  tasks:
+    
+  - name: Copy backup configs (ios)
+    command: sshpass -p {{ ansible_ssh_pass }} scp ./backup_orig/{{ inventory_hostname }}_orig {{ ansible_user }}@{{ inventory_hostname }}:/{{ inventory_hostname }}_orig
+  
+  - name: Replace configuration (ios)
+    ios_command:
+      commands:
+        - config replace flash0:/{{ inventory_hostname }}_orig force
+
+- connection: network_cli
+  gather_facts: False
+  hosts: 9ks
+  vars_files:
+  - group_vars/nxos.yml
+
+  tasks:
+    
+  - name: Copy backup configs (nxos)
+    command: sshpass -p {{ ansible_ssh_pass }} scp ./backup_orig/{{ inventory_hostname }}_orig {{ ansible_user }}@{{ inventory_hostname }}:/{{ inventory_hostname }}_orig
+    
+  - name: Replace configurations (nxos)
+    nxos_command:
+      commands:
+        - config replace bootflash:/{{ inventory_hostname }}_orig

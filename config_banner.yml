@@ -18,9 +18,3 @@
       banner: exec
       text: "{{ lookup('file', './config_partial/raw_banner.cfg') }}"
       state: present
-      
-  - name: Configure the incoming banner
-    ios_banner:
-      banner: incoming
-      text: "{{ lookup('file', './config_partial/raw_banner.cfg') }}"
-      state: present

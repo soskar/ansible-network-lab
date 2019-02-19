@@ -15,3 +15,20 @@ l3_interfaces:
     description: R2 Transit
     address: 10.10.12.42
     mask: 255.255.255.252
+
+bgp_global:
+  - as: 12345
+    rid: "{{ lo_interfaces[0].address }}"
+
+ibgp_neighbors:
+  - neighbor:
+    update_source:
+    remote_as:
+
+ebgp_neighbors:
+  - neighbor: 10.10.12.37
+    update_source: "{{ l3_interfaces[0].interface }}"
+    remote_as: 65000
+  - neighbor: 10.10.12.41
+    update_source: "{{ l3_interfaces[1].interface }}"
+    remote_as: 12345

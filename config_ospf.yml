@@ -19,8 +19,6 @@
       - "{{ lo_interfaces }}"
       - "{{ ospf }}"
       - "{{ ospf_interfaces }}"
-  - debug:
-      msg: "Test"
 
 - connection: network_cli
   gather_facts: False

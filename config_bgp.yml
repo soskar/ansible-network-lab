@@ -1,0 +1,53 @@
+---
+- connection: network_cli
+  gather_facts: False
+  hosts: bgp_ios
+  vars_files:
+  - group_vars/ios.yml
+
+  tasks:
+    
+  - name: Configure BGP
+    ios_config:
+      lines:
+        - bgp router-id {{ item.rid }}
+        - no bgp default ipv4-unicast
+      parents: router bgp {{ item.as }}
+    with_items: "{{ bgp_global }}"
+
+  - name: Configure iBGP neighbors (global)
+    ios_config:
+      lines:
+        - neighbor {{ item.neighbor }} remote-as {{ item.remote_as }}
+        - neighbor {{ item.neighbor }} update-source {{ item.update_source }}
+      parents: router bgp {{ bgp_global[0].as }}
+    with_items: "{{ ibgp_neighbors }}"
+    
+  - name: Configure iBGP neighbors (AF)
+    ios_config:
+      lines:
+        - neighbor {{ item.neighbor }} activate
+        - neighbor {{ item.neighbor }} next-hop-self
+        - neighbor {{ item.neighbor }} send-community both
+      parents:
+        - router bgp {{ bgp_global[0].as }}
+        - address-family ipv4 unicast
+    with_items: "{{ ibgp_neighbors }}"
+
+  - name: Configure eBGP neighbors (global)
+    ios_config:
+      lines:
+        - neighbor {{ item.neighbor }} remote-as {{ item.remote_as }}
+        - neighbor {{ item.neighbor }} update-source {{ item.update_source }}
+      parents: router bgp {{ bgp_global[0].as }}
+    with_items: "{{ ebgp_neighbors }}"
+    
+  - name: Configure eBGP neighbors (AF)
+    ios_config:
+      lines:
+        - neighbor {{ item.neighbor }} activate
+        - neighbor {{ item.neighbor }} send-community both
+      parents:
+        - router bgp {{ bgp_global[0].as }}
+        - address-family ipv4 unicast
+    with_items: "{{ ebgp_neighbors }}"

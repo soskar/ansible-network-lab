@@ -1,0 +1,26 @@
+---
+- connection: network_cli
+  gather_facts: False
+  hosts: nodes
+  vars_files:
+  - group_vars/ios.yml
+
+  tasks:
+    
+  - name: Configure hostnames (ios)
+    ios_config:
+      lines:
+        - hostname {{ inventory_hostname }}
+
+- connection: network_cli
+  gather_facts: False
+  hosts: 9ks
+  vars_files:
+  - group_vars/nxos.yml
+
+  tasks:
+  
+  - name: Configure hostnames (nxos)
+    nxos_config:
+      lines:
+        - hostname {{ inventory_hostname }}

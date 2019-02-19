@@ -1,16 +1,16 @@
 Building configuration...
 
   
-Current configuration : 2781 bytes
+Current configuration : 1768 bytes
 !
-! Last configuration change at 22:47:42 UTC Tue Feb 12 2019 by cisco
+! Last configuration change at 20:54:52 UTC Mon Feb 18 2019 by cisco
 !
 version 15.6
 service timestamps debug datetime msec
 service timestamps log datetime msec
 no service password-encryption
 !
-hostname R2
+hostname Router
 !
 boot-start-marker
 boot-end-marker
@@ -73,9 +73,6 @@ redundancy
 !
 !
 !
-interface Loopback0
- ip address 10.1.1.2 255.255.255.255
-!
 interface GigabitEthernet0/0
  description OOB Management
  vrf forwarding Mgmt-intf
@@ -86,28 +83,21 @@ interface GigabitEthernet0/0
  no cdp enable
 !
 interface GigabitEthernet0/1
- description SW2 Transit
- ip address 10.10.12.26 255.255.255.252
- no ip redirects
- no ip proxy-arp
+ no ip address
  duplex auto
  speed auto
  media-type rj45
 !
 interface GigabitEthernet0/2
- description SW1 Transit
- ip address 10.10.12.6 255.255.255.252
- no ip redirects
- no ip proxy-arp
+ no ip address
+ shutdown
  duplex auto
  speed auto
  media-type rj45
 !
 interface GigabitEthernet0/3
- description R3 Transit
- ip address 10.10.12.41 255.255.255.252
- no ip redirects
- no ip proxy-arp
+ no ip address
+ shutdown
  duplex auto
  speed auto
  media-type rj45
@@ -128,21 +118,6 @@ ipv6 ioam timestamp
 !
 control-plane
 !
-banner exec ^C
-*********************************WARNING**********************************
-*                            THIS IS A BANNER                            *
-**************************************************************************
-^C
-banner incoming ^C
-*********************************WARNING**********************************
-*                            THIS IS A BANNER                            *
-**************************************************************************
-^C
-banner login ^C
-*********************************WARNING**********************************
-*                            THIS IS A BANNER                            *
-**************************************************************************
-^C
 !
 line con 0
  password cisco
