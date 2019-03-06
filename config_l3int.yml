@@ -1,14 +1,14 @@
 ---
-- name: Configure layer 3 interfaces
+- name: Configure IOS layer 3 interfaces
   connection: network_cli
   gather_facts: False
-  hosts: nodes
+  hosts: ios_nodes
   vars_files:
   - group_vars/ios.yml
 
   tasks:
 
-  - name: L3 interfaces (ios)
+  - name: L3 interfaces
     ios_config:
       lines:
         - description {{ item.description }}
@@ -18,15 +18,16 @@
       parents: interface {{ item.interface }}
     with_items: "{{ l3_interfaces }}"
 
-- connection: network_cli
+- name: Configure NXOS layer 3 interfaces
+  connection: network_cli
   gather_facts: False
-  hosts: 9ks
+  hosts: nxos_9ks
   vars_files:
   - group_vars/nxos.yml
 
   tasks:
 
-  - name: L3 interfaces (nxos)
+  - name: L3 interfaces
     nxos_config:
       lines:
         - description {{ item.description }}
@@ -37,17 +38,17 @@
       parents: interface {{ item.interface }}
     with_items: "{{ l3_interfaces }}"
 
-  - name: Check NXOS interface-vlan feature
+  - name: Check interface-vlan feature
     nxos_feature:
       feature: interface-vlan
       state: enabled
 
-  - name: Check NXOS hsrp feature
+  - name: Check hsrp feature
     nxos_feature:
       feature: hsrp
       state: enabled
 
-  - name: SVIs (nxos)
+  - name: SVIs
     nxos_config:
       lines:
         - description {{ item.description }}
@@ -57,7 +58,7 @@
       parents: interface {{ item.interface }}
     with_items: "{{ svis }}"
 
-  - name: HSRP (nxos)
+  - name: HSRP
     nxos_config:
       lines:
         - priority {{ item.hsrp_priority }}

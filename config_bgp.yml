@@ -2,7 +2,7 @@
 - name: Configure BGP
   connection: network_cli
   gather_facts: False
-  hosts: bgp_ios
+  hosts: ios_routers
   vars_files:
   - group_vars/ios.yml
 

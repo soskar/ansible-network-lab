@@ -1,7 +1,7 @@
 ---
 - connection: network_cli
   gather_facts: False
-  hosts: nodes
+  hosts: ios_nodes
   vars_files:
   - group_vars/ios.yml
 
@@ -17,7 +17,7 @@
 
 - connection: network_cli
   gather_facts: False
-  hosts: 9ks
+  hosts: nxos_9ks
   vars_files:
   - group_vars/nxos.yml
 

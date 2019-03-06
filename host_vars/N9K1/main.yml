@@ -9,7 +9,7 @@ features:
 - feature: lacp
 
 lo_interfaces:
-  - interface: lo0
+  - interface: loopback0
     address: 10.1.1.6
     mask: 255.255.255.255
 

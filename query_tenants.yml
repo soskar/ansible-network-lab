@@ -1,0 +1,25 @@
+---
+- connection: local
+  gather_facts: False
+  hosts: apics
+  vars_files:
+  - group_vars/aci.yml
+  
+  tasks:
+  
+    - name: Query tenants
+      aci_tenant:
+        host: "{{ ansible_host }}"
+        username: "{{ username }}"
+        private_key: "{{ private_key }}"
+        validate_certs: "{{ validate_certs }}"
+        
+        state: query
+      delegate_to: localhost
+      register: all_tenants
+
+    - debug:
+        msg: "{{ item.fvTenant.attributes.name }}"
+      with_items: "{{ all_tenants.current }}"
+      loop_control:
+        label: "{{ item.fvTenant.attributes.name }}"

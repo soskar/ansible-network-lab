@@ -1,27 +1,26 @@
-[routers]
+[ios_routers]
 R1 ansible_ssh_host=172.16.1.11
 R2 ansible_ssh_host=172.16.1.12
 R3 ansible_ssh_host=172.16.1.15
 
-[switches]
+[ios_switches]
 SW1 ansible_ssh_host=172.16.1.13
 SW2 ansible_ssh_host=172.16.1.14
 
-[9ks]
+[nxos_9ks]
 N9K1 ansible_ssh_host=172.16.1.16
 N9K2 ansible_ssh_host=172.16.1.17
 
-[nodes:children]
-routers
-switches
+[ios_nodes:children]
+ios_routers
+ios_switches
 
-[ospf_ios]
+[ios_ospf]
 SW1 ansible_ssh_host=172.16.1.13
 SW2 ansible_ssh_host=172.16.1.14
 R1 ansible_ssh_host=172.16.1.11
 R2 ansible_ssh_host=172.16.1.12
 
-[bgp_ios]
-R1 ansible_ssh_host=172.16.1.11
-R2 ansible_ssh_host=172.16.1.12
-R3 ansible_ssh_host=172.16.1.15
+[apics]
+APIC ansible_host=apic ansible_connection=local validate_certs=False
+

@@ -1,0 +1,16 @@
+---
+- name: Collect facts
+  connection: network_cli
+  gather_facts: False
+  hosts: ios_nodes
+  vars_files:
+  - group_vars/ios.yml
+
+  tasks:
+
+  - name: Collect IOS facts
+    ios_facts:
+    register: ios_facts
+  
+  - name: Save facts to JSON file
+    copy: content="{{ ios_facts | to_nice_json }}" dest="out/{{ inventory_hostname }}_ios_facts.json"

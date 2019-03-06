@@ -2,16 +2,16 @@
 hostname: R3
 
 lo_interfaces:
-  - interface: lo0
+  - interface: loopback0
     address: 10.1.1.5
     mask: 255.255.255.255
 
 l3_interfaces:
-  - interface: Gi0/1
+  - interface: GigabitEthernet0/1
     description: R1 Transit
     address: 10.10.12.38
     mask: 255.255.255.252
-  - interface: Gi0/2
+  - interface: GigabitEthernet0/2
     description: R2 Transit
     address: 10.10.12.42
     mask: 255.255.255.252

@@ -12,6 +12,7 @@ vdc switch id 1
   limit-resource m6route-mem minimum 8 maximum 8
 feature nxapi
 feature scp-server
+cfs eth distribute
 
 no password strength-check
 username admin password 5 $5$6w26EvS.$WC3e1fc9Q422Nqsfv2OS33vSy49/Kj1yQnuD1pls6b9  role network-admin

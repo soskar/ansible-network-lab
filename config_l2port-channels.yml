@@ -1,13 +1,14 @@
 ---
-- connection: network_cli
+- name: Configure IOS layer 2 port-channels
+  connection: network_cli
   gather_facts: False
-  hosts: switches
+  hosts: ios_switches
   vars_files:
   - group_vars/ios.yml
 
   tasks:
 
-  - name: Configure layer 2 port-channel members
+  - name: Port-channel members
     ios_config:
       lines:
         - switchport
@@ -16,20 +17,21 @@
       parents: interface {{ item.interface }}
     with_items: "{{ l2_pc_members }}"
 
-- connection: network_cli
+- name: Configure NXOS layer 2 port-channels
+  connection: network_cli
   gather_facts: False
-  hosts: 9ks
+  hosts: nxos_9ks
   vars_files:
   - group_vars/nxos.yml
 
   tasks:
   
-  - name: Check NXOS LACP feature
+  - name: Check LACP feature
     nxos_feature:
       feature: lacp
       state: enabled
 
-  - name: Configure NXOS layer 2 port-channel members
+  - name: Port-channel members
     nxos_config:
       lines:
         - switchport

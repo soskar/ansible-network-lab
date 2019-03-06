@@ -1,0 +1,98 @@
+{
+    "ansible_facts": {
+        "ansible_net_all_ipv4_addresses": [
+            "10.10.12.42", 
+            "10.10.12.38", 
+            "172.16.1.15", 
+            "10.1.1.5"
+        ], 
+        "ansible_net_all_ipv6_addresses": [], 
+        "ansible_net_filesystems": [
+            "flash0:"
+        ], 
+        "ansible_net_gather_subset": [
+            "hardware", 
+            "default", 
+            "interfaces"
+        ], 
+        "ansible_net_hostname": "R3", 
+        "ansible_net_image": "flash0:/vios-adventerprisek9-m", 
+        "ansible_net_interfaces": {
+            "GigabitEthernet0/0": {
+                "bandwidth": 1000000, 
+                "description": null, 
+                "duplex": "Auto", 
+                "ipv4": [
+                    {
+                        "address": "172.16.1.15", 
+                        "subnet": "24"
+                    }
+                ], 
+                "lineprotocol": "up ", 
+                "macaddress": "5e00.0006.0000", 
+                "mediatype": "RJ45", 
+                "mtu": 1500, 
+                "operstatus": "up", 
+                "type": "iGbE"
+            }, 
+            "GigabitEthernet0/1": {
+                "bandwidth": 1000000, 
+                "description": "R1 Transit", 
+                "duplex": "Auto", 
+                "ipv4": [
+                    {
+                        "address": "10.10.12.38", 
+                        "subnet": "30"
+                    }
+                ], 
+                "lineprotocol": "up ", 
+                "macaddress": "fa16.3ed7.5c76", 
+                "mediatype": "RJ45", 
+                "mtu": 1500, 
+                "operstatus": "up", 
+                "type": "iGbE"
+            }, 
+            "GigabitEthernet0/2": {
+                "bandwidth": 1000000, 
+                "description": "R2 Transit", 
+                "duplex": "Auto", 
+                "ipv4": [
+                    {
+                        "address": "10.10.12.42", 
+                        "subnet": "30"
+                    }
+                ], 
+                "lineprotocol": "up ", 
+                "macaddress": "fa16.3e8a.f614", 
+                "mediatype": "RJ45", 
+                "mtu": 1500, 
+                "operstatus": "up", 
+                "type": "iGbE"
+            }, 
+            "Loopback0": {
+                "bandwidth": 8000000, 
+                "description": null, 
+                "duplex": null, 
+                "ipv4": [
+                    {
+                        "address": "10.1.1.5", 
+                        "subnet": "32"
+                    }
+                ], 
+                "lineprotocol": "up ", 
+                "macaddress": null, 
+                "mediatype": null, 
+                "mtu": 1514, 
+                "operstatus": "up", 
+                "type": null
+            }
+        }, 
+        "ansible_net_memfree_mb": 256424, 
+        "ansible_net_memtotal_mb": 323473, 
+        "ansible_net_model": "IOSv", 
+        "ansible_net_serialnum": "9XTPIKN8W0S22B73QNECB", 
+        "ansible_net_version": "15.6(3)M2"
+    }, 
+    "changed": false, 
+    "failed": false
+}

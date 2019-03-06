@@ -1,13 +1,14 @@
 ---
-- connection: network_cli
+- name: Configure IOS access ports
+  connection: network_cli
   gather_facts: False
-  hosts: switches
+  hosts: ios_switches
   vars_files:
   - group_vars/ios.yml
 
   tasks:
 
-  - name: Configure access ports (ios)
+  - name: Access ports
     ios_config:
       lines:
         - description {{ item.description }}
@@ -19,14 +20,15 @@
     with_items: "{{ access_ports }}"
 
 - connection: network_cli
+  name: Configure NXOS access ports
   gather_facts: False
-  hosts: 9ks
+  hosts: nxos_9ks
   vars_files:
   - group_vars/nxos.yml
 
   tasks:
 
-  - name: Configure access ports (nxos)
+  - name: Access ports
     nxos_config:
       lines:
         - description {{ item.description }}

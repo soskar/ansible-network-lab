@@ -1,7 +1,8 @@
 ---
-- connection: network_cli
+- name: Configure IOS trunks
+  connection: network_cli
   gather_facts: False
-  hosts: switches
+  hosts: ios_switches
   vars_files:
   - group_vars/ios.yml
 
@@ -17,15 +18,16 @@
       parents: interface {{ item.trunk }}
     with_items: "{{ trunks }}"
 
-- connection: network_cli
+- name: Configure NXOS trunks
+  connection: network_cli
   gather_facts: False
-  hosts: 9ks
+  hosts: nxos_9ks
   vars_files:
   - group_vars/nxos.yml
 
   tasks:
   
-  - name: Configure trunks (nxos)
+  - name: Configure trunks
     nxos_config:
       lines:
         - switchport

@@ -1,92 +1,95 @@
 ---
-- connection: network_cli
+- name: Enable IOS switch interfaces
+  connection: network_cli
   gather_facts: False
-  hosts: switches
+  hosts: ios_switches
   vars_files:
   - group_vars/ios.yml
 
   tasks:
 
-  - name: Enable port-channel members (ios)
+  - name: Enable port-channel members
     ios_config:
       lines:
         - no shutdown
       parents: interface {{ item.interface }}
     with_items: "{{ l2_pc_members }}"
 
-  - name: Enable L2 port-channels (ios)
+  - name: Enable L2 port-channels
     ios_config:
       lines:
         - no shutdown
       parents: interface {{ item.interface }}
     with_items: "{{ l2_pc_interfaces }}"
 
-  - name: Enable trunks (ios)
+  - name: Enable trunks
     ios_config:
       lines:
         - no shutdown
       parents: interface {{ item.trunk }}
     with_items: "{{ trunks }}"
 
-  - name: Enable access ports (ios)
+  - name: Enable access ports
     ios_config:
       lines:
         - no shutdown
       parents: interface {{ item.access_port }}
     with_items: "{{ access_ports }}"
 
-- connection: network_cli
+- name: Enable IOS interfaces
+  connection: network_cli
   gather_facts: False
-  hosts: nodes
+  hosts: ios_nodes
   vars_files:
   - group_vars/ios.yml
 
   tasks:
 
-  - name: Enable Layer 3 interfaces (ios)
+  - name: Enable Layer 3 interfaces
     ios_config:
       lines:
         - no shutdown
       parents: interface {{ item.interface }}
     with_items: "{{ l3_interfaces }}"
 
-- connection: network_cli
+- name: Enable NXOS interfaces
+  connection: network_cli
   gather_facts: False
-  hosts: 9ks
+  hosts: nxos_9ks
   vars_files:
   - group_vars/nxos.yml
 
   tasks:
 
-  - name: Enable port-channel members (nxos)
+  - name: Enable port-channel members
     nxos_config:
       lines:
         - no shutdown
       parents: interface {{ item.interface }}
     with_items: "{{ l2_pc_members }}"
 
-  - name: Enable L2 port-channels (nxos)
+  - name: Enable L2 port-channels
     nxos_config:
       lines:
         - no shutdown
       parents: interface {{ item.interface }}
     with_items: "{{ l2_pc_interfaces }}"
 
-  - name: Enable trunks (nxos)
+  - name: Enable trunks
     nxos_config:
       lines:
         - no shutdown
       parents: interface {{ item.trunk }}
     with_items: "{{ trunks }}"
 
-  - name: Enable access ports (nxos)
+  - name: Enable access ports
     nxos_config:
       lines:
         - no shutdown
       parents: interface {{ item.access_port }}
     with_items: "{{ access_ports }}"
 
-  - name: Enable Layer 3 interfaces (nxos)
+  - name: Enable Layer 3 interfaces
     nxos_config:
       lines:
         - no shutdown

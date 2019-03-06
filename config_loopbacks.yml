@@ -1,7 +1,8 @@
 ---
-- connection: network_cli
+- name: Configure IOS loopbacks
+  connection: network_cli
   gather_facts: False
-  hosts: nodes
+  hosts: ios_nodes
   vars_files:
   - group_vars/ios.yml
 
@@ -14,9 +15,10 @@
       parents: interface {{ item.interface }}
     with_items: "{{ lo_interfaces }}"
 
-- connection: network_cli
+- name: Configure NXOS loopbacks
+  connection: network_cli
   gather_facts: False
-  hosts: 9ks
+  hosts: nxos_9ks
   vars_files:
   - group_vars/nxos.yml
 

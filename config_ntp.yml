@@ -1,0 +1,25 @@
+---
+- name: Configure NTP
+  connection: network_cli
+  gather_facts: False
+  hosts: ios_nodes
+  vars_files:
+  - group_vars/ios.yml
+
+  tasks:
+
+  - name: Get config
+    ios_command:
+      commands:
+        - show running-config | include ntp server
+    register: get_config
+
+  - debug:
+      msg: "{{ get_config.stdout_lines[0] }}"
+
+  - name: Set NTP server
+    when: "get_config.stdout_lines[0] == ''"
+    with_items: "{{ get_config.stdout_lines[0] }}"
+    ios_config:
+      lines:
+        - ntp server 1.2.3.4

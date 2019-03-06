@@ -1,14 +1,14 @@
 ---
-- name: Configure OSPF
+- name: Configure IOS OSPF
   connection: network_cli
   gather_facts: False
-  hosts: ospf_ios
+  hosts: ios_ospf
   vars_files:
   - group_vars/ios.yml
 
   tasks:
     
-  - name: Configure OSPF (ios)
+  - name: Configure OSPF
     ios_config:
       lines:
         - router-id {{ item[0].address }}
@@ -21,16 +21,17 @@
       - "{{ ospf }}"
       - "{{ ospf_interfaces }}"
 
-  - name: Originate default (ios)
+  - name: Originate default
     ios_config:
       lines:
         - default-information originate
       parents: router ospf 100
     when: ospf_oirigate_default is defined
 
-- connection: network_cli
+- name: Configure NXOS OSPF
+  connection: network_cli
   gather_facts: False
-  hosts: 9ks
+  hosts: nxos_9ks
   vars_files:
   - group_vars/nxos.yml
 
@@ -41,7 +42,7 @@
       feature: ospf
       state: enabled
 
-  - name: Configure OSPF global settings (nxos)
+  - name: Configure OSPF global settings
     nxos_config:
       lines:
         - router-id {{ item.address }}
