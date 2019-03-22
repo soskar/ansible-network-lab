@@ -1,0 +1,4 @@
+---
+tenants:
+  - name: Ansible
+    description: Tenant created with Ansible
